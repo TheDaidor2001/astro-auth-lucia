@@ -19,11 +19,22 @@ const Session = defineTable({
   }
 })
 
+const Blog = defineTable({
+  columns: {
+    id: column.text({primaryKey: true, optional: false, unique: true}),
+    title: column.text({optional: false}),
+    subtitle: column.text({optional: true}),
+    content: column.text({optional: false}),
+    date: column.text(),
+  }
+})
+
 
 // https://astro.build/db/config
 export default defineDb({
   tables: {
     User,
-    Session
+    Session,
+    Blog
   }
 });

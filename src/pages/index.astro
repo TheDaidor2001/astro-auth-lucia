@@ -1,5 +1,8 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { FormBlog } from "@/components/FormBlog";
+import { db, Blog } from "astro:db";
+
 const user = Astro.locals.user;
 
 console.log(user);
@@ -7,14 +10,29 @@ console.log(user);
 if (!user) {
 	return Astro.redirect("/login");
 }
+
+const blogs = await db.select().from(Blog);
 ---
 
 <Layout title="Welcome to Astro.">
 	<h1 class="text-white">Hola mundo</h1>
+	<div class="my-20">
+		{
+			blogs.map((blog) => (
+				<>
+					<h4 class="text-white text-center">{blog.title}</h4>
+					<div class="prose lg:prose-xl" set:html={blog.content} />
+				</>
+			))
+		}
+	</div>
 
 	<form method="post" action="/api/signout" class="flex items-center">
 		<button class="mx-auto bg-white px-10 py-1 rounded-lg">Sign out</button>
 	</form>
+	<div></div>
+
+	<FormBlog client:only />
 </Layout>
 
 <style>
